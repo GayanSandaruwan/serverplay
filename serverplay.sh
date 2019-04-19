@@ -18,14 +18,20 @@ echo $nzone
 
 deploymentServer=""
 
-case "$nzone" in 										# switch statement for determining deployment server
-	"d") deploymentServer="abc" ;;
-	"a") deploymentServer="def" ;;
-	"i") deploymentServer="ghi" ;;
-	"s") deploymentServer="jkl" ;;
-	"q") deploymentServer="mno" ;;
-	"u") deploymentServer="pqresac" ;;
-esac
+if [ "${hostname:0:3}" == "he3" ]; then
+	deploymentServer="abc-deploy-xyz"
+elif [ "${hostname:0:2}" == "or" ]; then
+	if [ "${hostname:3:1}" == "a" -o "${hostname:3:1}" == "d" ]; then
+		deploymentServer="abc-deploy-or2-apz"
+	else
+		deploymentServer="abc-deploy-or2"
+	fi
+elif [ "${hostname:3:1}" == "a" -o "${hostname:3:1}" == "d" ]; then
+	deploymentServer="abc-deploy-apz"
+else
+	deploymentServer="abc-deploy"
+fi
+
 
 networkZone=""
 case "nzone" in 										# Switch statement for determining network Zone
@@ -38,12 +44,20 @@ case "nzone" in 										# Switch statement for determining network Zone
 esac
 														# Executing the commands
 /opt/abc/xyz/bin/abc disable boot-start
+
+sleep 10
 /opt/abc/xyz/bin/abc stop
+sleep 10
 kill -9 `ps -ef | grep abc | grep -v grep | awk '{print $2;}'`
+sleep 10
 tar -xf $installFile -C /opt/abc
+sleep 10
 /opt/abc/xyz/bin/abc start --accept-license --answer-yes
+sleep 10
 rm -rf /opt/abc/xyz/etc/apps/fm_dc
+sleep 10
 mkdir -p /opt/abc/xyz/etc/apps/fm_dc/local
+sleep 10
 																		#Writing the config file
 cat >/opt/abc/xyz/etc/apps/fm_dc/local/deployclient.conf<<EOL
 # cat >./test.conf<<EOL
@@ -55,4 +69,5 @@ EOL
 # cat ./test.conf
 cat /opt/abc/xyz/etc/apps/fm_dc/local/deployclient.conf
 
+sleep 60
 /opt/abc/xyz/bin/abc restart

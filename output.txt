@@ -1,0 +1,45 @@
+Iron-Man
+Iron-Man
+Iro
+n
+deploymentServer
+
+./serverplayTest.sh: line 48: /opt/abc/xyz/bin/abc: No such file or directory
+Iron-Man
+Iro
+n
+Deployment Server : abc-deploy-xyz
+Network Zone : 
+./serverplayTest.sh: line 48: /opt/abc/xyz/bin/abc: No such file or directory
+Iron-Man
+Iro
+n
+Deployment Server : abc-deploy
+Network Zone : 
+./serverplayTest.sh: line 48: /opt/abc/xyz/bin/abc: No such file or directory
+Iron-Man
+Iro
+n
+Deployment Server : abc-deploy
+Network Zone : 
+./serverplayTest.sh: line 48: /opt/abc/xyz/bin/abc: No such file or directory
+Iron-Man
+Iro
+n
+Deployment Server : abc-deploy-xyz
+Network Zone : 
+./serverplayTest.sh: line 48: /opt/abc/xyz/bin/abc: No such file or directory
+./serverplayTest.sh: line 51: /opt/abc/xyz/bin/abc: No such file or directory
+kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill -l [sigspec]
+Iron-Man
+Iro
+n
+Deployment Server : abc-deploy
+Network Zone : 
+./serverplayTest.sh: line 48: /opt/abc/xyz/bin/abc: No such file or directory
+Iron-Man
+Iro
+n
+Deployment Server : abc-deploy
+Network Zone : 
+./serverplayTest.sh: line 50: /opt/abc/xyz/bin/abc: No such file or directory
