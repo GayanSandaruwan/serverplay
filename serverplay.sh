@@ -3,6 +3,8 @@
 # sudo chmod +x serverplay.sh
 # Then run it from termianl by 
 # ./serverplay.sh
+defaultPassword="abcd"									# Default password
+newPassword="xyz" 										# New Password
 
 hostname=$HOSTNAME										# Read Hostname								
 echo $hostname
@@ -33,15 +35,34 @@ else
 fi
 
 
-networkZone=""
+networkZone="ROTN"										# Default value ROTN
 case "nzone" in 										# Switch statement for determining network Zone
-	"d") networkZone="D" ;;
-	"a") networkZone="APP" ;;
-	"i") networkZone="inter" ;;
-	"s") networkZone="cor" ;;
-	"q") networkZone="dta" ;;
-	"u") networkZone="usr" ;;
+	"d") networkZone="DMZ" ;;
+	"a") networkZone="APZ" ;;
+	# "i") networkZone="ROTN" ;;
+	# "s") networkZone="ROTN" ;;
+	# "q") networkZone="ROTN" ;;
+	# "u") networkZone="ROTN" ;;
 esac
+
+
+
+
+checkDir="/opt/abc";
+if [ -d $checkDir ]										#Check if file exists or not
+then
+    	echo "Found File, "$checkDir					#File exists save a backup
+else
+    	echo "File Not found "$checkDir					#No file found 
+    													# If there is not a "/opt/abc" the following commands need to be executed:
+		tar -xvzf $installFile -C /opt/abc 				#This intalls the file:
+
+														#this accepts the license and runs
+		/opt/abc/bin/abc start --accept-license --answer-yes --auto-ports --no-prompt -auth admin:$defaultPassword
+fi
+
+
+			
 														# Executing the commands
 /opt/abc/xyz/bin/abc disable boot-start
 
@@ -66,8 +87,29 @@ cat >/opt/abc/xyz/etc/apps/fm_dc/local/deployclient.conf<<EOL
 [target-broker:dserver]
 targetUri = $deploymentServer:$port
 EOL
-# cat ./test.conf
 cat /opt/abc/xyz/etc/apps/fm_dc/local/deployclient.conf
+
+sleep 10
+
+#make two directories metaInputs/local
+mkdir -p /opt/abc/xyz/etc/apps/metaInputs/local
+
+sleep 10
+
+#Add intakes.conf file to /opt/abc/xyz/etc/apps/metaInputs/local
+cat >/opt/abc/xyz/etc/apps/fm_dc/local/metaInputs.conf<<EOL
+# cat >./test.conf<<EOL
+
+_meta::nzone
+EOL
+cat /opt/abc/xyz/etc/apps/metaInputs/local/metaInputs.conf
+
+sleep 10
+
+#this changes admin password
+/opt/abc/bin/abc edit user admin -password $newPassword -auth admin:$defaultPassword
+
 
 sleep 60
 /opt/abc/xyz/bin/abc restart
+
