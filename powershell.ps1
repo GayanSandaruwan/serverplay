@@ -10,7 +10,7 @@ $port="8089"
 $hostname=$env:computername
 $installFile="abc.tgz"
 
-echo $hostname
+echo "$hostname
 #GOTO setDeploymentServer
 
 ########################################################################################################################################
@@ -36,7 +36,7 @@ elseif($hostname.Substring(3,1) -eq "a" -or $hostname.Substring(3,1) -eq "d"){
 else {
     deploymentServer="softwareName-deploy"
 } 
-echo $deploymentServer
+echo "$deploymentServer
 
 ########################################################################################################################################
 # If statement to assign networkZone
@@ -63,12 +63,12 @@ echo $networkZone
 #All Variable being echoed:
 
 
-echo Host Name is $hostname
-echo Port is $port
-echo Directory to check is $checkDir
-echo Intallation file is $installFile
-echo The Deployment Server is $deploymentServer
-echo The Network Zone is $networkZone
+echo "Host Name is $hostname"
+echo "Port is $port"
+echo "Directory to check is $checkDir"
+echo "Intallation file is $installFile"
+echo "The Deployment Server is $deploymentServer"
+echo "The Network Zone is $networkZone"
 
 ########################################################################################################################################
 # If statement to check if the directory is present
@@ -84,39 +84,39 @@ IF ( Test-Path $checkDir ) {
 
 
 
-    echo The directory is Present
+    echo "The directory is Present"
     $version = /Applications/softwareNameforwarder/bin/softwareName version
-    echo The current Version is %version%
-    echo This is an upgrade
-    echo Disabling boot-start
+    echo "The current Version is $version"
+    echo "This is an upgrade"
+    echo "Disabling boot-start"
 
     /opt/softwareNameforwarder/bin/softwareName disable boot-start
     timeout /t 10 /nobreak > NUL
 
-    echo Stopping softwareNameforwarder forwarder
+    echo "Stopping softwareNameforwarder forwarder"
     /opt/softwareNameforwarder/bin/softwareName stop
     timeout /t 10 /nobreak > NUL
-    echo Upgrading softwareName forwarder to %version%
+    echo "Upgrading softwareName forwarder to $version"
     Expand-Tar $installFile /opt
     timeout /t 10 /nobreak > NUL
 
-    echo Starting softwareNameforwarder and accepting the license
+    echo "Starting softwareNameforwarder and accepting the license"
     /opt/softwareNameforwarder/bin/softwareName start --accept-license --answer-yes
     timeout /t 10 /nobreak > NUL
 
-    echo Removing deployment client Apps from /etc/apps
+    echo "Removing deployment client Apps from /etc/apps"
     rmdir \s \q /opt/softwareNameforwarder/etc/apps/*deployment*
     timeout /t 10 /nobreak > NUL
 
-    echo Removing deploymentlient.conf from /etc/system/local
+    echo "Removing deploymentlient.conf from /etc/system/local"
     del /opt/softwareNameforwarder/etc/system/local/deploymentclient.conf
     timeout /t 10 /nobreak > NUL
 
-    echo Making a new directory for deployment client companyName_all_deploymentclient
+    echo "Making a new directory for deployment client companyName_all_deploymentclient"
     mkdir /opt/softwareNameforwarder/etc/apps/companyName_all_deploymentclient/local
     timeout /t 10 /nobreak > NUL
 
-    echo Making a new directory for network _meta tag input
+    echo "Making a new directory for network _meta tag input"
     mkdir /opt/softwareNameforwarder/etc/apps/companyName_all_metaInputs/local
     timeout /t 10 /nobreak > NUL
 
@@ -124,14 +124,14 @@ IF ( Test-Path $checkDir ) {
     # Text files with the following text being created in the above mentioned folders
     ########################################################################################################################################
 
-    echo Creating a new deploymentclient.conf in "/etc/apps"
+    echo "Creating a new deploymentclient.conf in /etc/apps"
     Add-Content -path /opt/softwareNameforwarder/etc/apps/companyName_all_deploymentclient/local/deploymentclient.conf @"
 [deployment-client]
 
 [target-broker:$deploymentServer]
 targetUri = $deploymentServer':'$port
 "@
-    echo Creating Inputs.conf with meta tags
+    echo "Creating Inputs.conf with meta tags"
     Add-Content -path /opt/softwareNameforwarder/etc/apps/companyName_all_metaInputs/local/inputs.conf @"
 [default]
 host = $hostname
@@ -141,10 +141,10 @@ host = $hostname
     echo "Inputs.conf Created"
     timeout /t 60 /nobreak > NUL
 
-    echo Restarting softwareNameforwarder Forwarder
+    echo "Restarting softwareNameforwarder Forwarder"
     /opt/softwareNameforwarder/bin/softwareName restart
     $newVersion=/opt/softwareNameforwarder/bin
-    echo The new version is $newVersion
+    echo "The new version is $newVersion"
 
 }
 ELSE {
@@ -159,28 +159,28 @@ ELSE {
     echo "This is a new install"
 
 
-    echo Creating a new deploymentclient.conf in "/etc/apps"
+    echo "Creating a new deploymentclient.conf in /etc/apps"
     Add-Content -path /opt/softwareNameforwarder/etc/apps/companyName_all_deploymentclient/local/deploymentclient.conf @"
 [deployment-client]
 
 [target-broker:$deploymentServer]
 targetUri = $deploymentServer':'$port
 "@
-    echo Deployment Client Created
+    echo "Deployment Client Created"
     timeout /t 10 /nobreak > NUL
-    echo Creating Inputs.conf with meta tags
+    echo "Creating Inputs.conf with meta tags"
     Add-Content -path /opt/softwareNameforwarder/etc/apps/companyName_all_metaInputs/local/inputs.conf @"
 [default]
 host = $hostname
  _meta = networkZone::$networkZone
 "@
-    echo Inputs.conf Created
+    echo "Inputs.conf Created"
     timeout /t 60 /nobreak > NUL
 
-    echo Restarting softwareNameforwarder Forwarder
+    echo "Restarting softwareNameforwarder Forwarder"
     /opt/softwareNameforwarder/bin/softwareName restart
     $newVersion=/opt/softwareNameforwarder/bin
-    echo The new version is $newVersion
+    echo "The new version is $newVersion"
 	
 }
 
